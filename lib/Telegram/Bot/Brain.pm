@@ -290,9 +290,6 @@ sub deleteMessage {
   my $self = shift;
   my $args = shift || {};
   my $send_args = {};
-  croak "no chat_id supplied" unless $args->{chat_id};
-  $send_args->{chat_id} = $args->{chat_id};
- 
   croak "no message_id supplied" unless $args->{message_id};
   $send_args->{message_id} = $args->{message_id};
   
@@ -301,6 +298,37 @@ sub deleteMessage {
   my $api_response = $self->_post_request($url, $send_args);
  
   return $api_response;
+}
+
+sub editMessageText {
+  my $self = shift;
+  my $args = shift || {};
+  my $send_args = {};
+  croak "no chat_id supplied" unless $args->{chat_id};
+  $send_args->{chat_id} = $args->{chat_id};
+  croak "no message_id supplied"    unless $args->{message_id};
+  $send_args->{message_id}    = $args->{message_id};
+
+  # these are optional, send if they are supplied
+  $send_args->{text} = $args->{text} if exists $args->{text};
+  $send_args->{parse_mode} = $args->{parse_mode} if exists $args->{parse_mode};
+  $send_args->{disable_web_page_preview} = $args->{disable_web_page_preview} if exists $args->{disable_web_page_preview};
+
+  if (exists $args->{reply_markup}) {
+    my $reply_markup = $args->{reply_markup};
+    die "bad reply_markup supplied"
+      if ( ref($reply_markup) ne 'Telegram::Bot::Object::InlineKeyboardMarkup' &&
+           ref($reply_markup) ne 'Telegram::Bot::Object::ReplyKeyboardMarkup'  &&
+           ref($reply_markup) ne 'Telegram::Bot::Object::ReplyKeyboardRemove'  &&
+           ref($reply_markup) ne 'Telegram::Bot::Object::ForceReply' );
+    $send_args->{reply_markup} = encode_json($reply_markup->as_hashref);
+  }
+  my $token = $self->token || croak "no token?";
+  my $url = "https://api.telegram.org/bot${token}/editMessageText";
+  my $api_response = $self->_post_request($url, $send_args);
+
+  return Telegram::Bot::Object::Message->create_from_hash($api_response, $self);
+
 }
 
 =method sendPhoto
