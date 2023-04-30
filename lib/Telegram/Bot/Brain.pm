@@ -65,6 +65,8 @@ use Data::Dumper;
 use Telegram::Bot::Object::Message;
 use Telegram::Bot::Object::InlineQuery;
 use Telegram::Bot::Object::CallbackQuery;
+use Telegram::Bot::Object::ChatJoinRequest;
+use Telegram::Bot::Object::ChatMemberUpdated;
 use Telegram::Bot::Object::ChatMember;
 
 # base class for building telegram robots with Mojolicious
@@ -555,6 +557,85 @@ sub getChatMember {
   return Telegram::Bot::Object::ChatMember->create_from_hash($api_response, $self);
 }
 
+sub approveChatJoinRequest {
+  my $self = shift;
+  my $args = shift || {};
+
+  my $answer_args = {};
+  croak "no chat_id supplied" unless $args->{chat_id};
+  $answer_args->{chat_id} = $args->{chat_id};
+  croak "no user_id supplied" unless $args->{user_id};
+  $answer_args->{user_id} = $args->{user_id};
+
+  # no optional args
+
+  my $token = $self->token || croak "no token?";
+  my $url =  "https://api.telegram.org/bot${token}/approveChatJoinRequest";
+  my $api_response = $self->_post_request($url, $answer_args);
+
+  return 1;
+}
+
+sub declineChatJoinRequest {
+  my $self = shift;
+  my $args = shift || {};
+
+  my $answer_args = {};
+  croak "no chat_id supplied" unless $args->{chat_id};
+  $answer_args->{chat_id} = $args->{chat_id};
+  croak "no user_id supplied" unless $args->{user_id};
+  $answer_args->{user_id} = $args->{user_id};
+
+  # no optional args
+
+  my $token = $self->token || croak "no token?";
+  my $url =  "https://api.telegram.org/bot${token}/declineChatJoinRequest";
+  my $api_response = $self->_post_request($url, $answer_args);
+
+  return 1;
+}
+
+sub banChatMember {
+  my $self = shift;
+  my $args = shift || {};
+
+  my $answer_args = {};
+  croak "no chat_id supplied" unless $args->{chat_id};
+  $answer_args->{chat_id} = $args->{chat_id};
+  croak "no user_id supplied" unless $args->{user_id};
+  $answer_args->{user_id} = $args->{user_id};
+
+  # optional args
+  $answer_args->{until_date} = $args->{until_date} if exists $args->{until_date};
+  $answer_args->{revoke_messages} = $args->{revoke_messages} if exists $args->{revoke_messages};
+  
+  my $token = $self->token || croak "no token?";
+  my $url =  "https://api.telegram.org/bot${token}/banChatMember";
+  my $api_response = $self->_post_request($url, $answer_args);
+
+  return 1;
+}
+
+sub unbanChatMember {
+  my $self = shift;
+  my $args = shift || {};
+
+  my $answer_args = {};
+  croak "no chat_id supplied" unless $args->{chat_id};
+  $answer_args->{chat_id} = $args->{chat_id};
+  croak "no user_id supplied" unless $args->{user_id};
+  $answer_args->{user_id} = $args->{user_id};
+
+  # optional args
+  $answer_args->{only_if_banned} = $args->{only_if_banned} if exists $args->{only_if_banned};
+
+  my $token = $self->token || croak "no token?";
+  my $url =  "https://api.telegram.org/bot${token}/unbanChatMember";
+  my $api_response = $self->_post_request($url, $answer_args);
+
+  return 1;
+}
+
 sub _add_getUpdates_handler {
   my $self = shift;
 
@@ -605,6 +686,8 @@ sub _process_message {
     $update = Telegram::Bot::Object::InlineQuery->create_from_hash($item->{inline_query}, $self)    if $item->{inline_query};
     $update = Telegram::Bot::Object::Message->create_from_hash($item->{my_chat_member}, $self)      if $item->{my_chat_member};		# after v0.025
     $update = Telegram::Bot::Object::CallbackQuery->create_from_hash($item->{callback_query}, $self) if $item->{callback_query};
+    $update = Telegram::Bot::Object::ChatJoinRequest->create_from_hash($item->{chat_join_request}, $self) if $item->{chat_join_request};
+    $update = Telegram::Bot::Object::ChatMemberUpdated->create_from_hash($item->{chat_member}, $self) if $item->{chat_member};
 
     # if we got to this point without creating a response, it must be a type we
     # don't handle yet
@@ -627,7 +710,7 @@ sub _post_request {
 
   my $res = $self->ua->post($url, form => $form_args)->result;
   if    ($res->is_success) { return $res->json->{result}; }
-  elsif ($res->is_error)   { warn "Failed to post: " . $res->json->{description}; }
+  elsif ($res->is_error)   { warn "Failed to post: " . $res->json->{description} . "\n" . Data::Dumper::Dumper($form_args); }
   else                     { die "Not sure what went wrong"; }
 }
 
