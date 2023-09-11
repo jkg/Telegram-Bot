@@ -1,5 +1,6 @@
 {{$NEXT}}
-
+    - add new reply_html convenience method to
+      Telegram::Bot::Object::Message that sets the parse_mode to HTML
     - add sendDocument method to send file messages
 
 0.023     2023-08-14 13:18:20+03:00 Europe/Helsinki
