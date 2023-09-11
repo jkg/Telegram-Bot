@@ -150,4 +150,24 @@ sub reply {
   return $self->_brain->sendMessage({chat_id => $self->chat->id, text => $text});
 }
 
+=method
+
+A convenience method to reply to a message with text in
+L<https://core.telegram.org/bots/api#html-style|HTML|mode>. Use this if you
+want to use HTML instead of Markdown, or if you want to incldue a bot command
+in code markup.
+
+  my $new_msg = $msg->reply_html('<code>/foo</code>');
+
+Will return the L<Telegram::Bot::Object::Message> object representing the message
+sent.
+
+=cut
+
+sub reply_html {
+  my $self = shift;
+  my $text = shift;
+  return $self->_brain->sendMessage({chat_id => $self->chat->id, text => $text, parse_mode => 'HTML'});
+}
+
 1;
