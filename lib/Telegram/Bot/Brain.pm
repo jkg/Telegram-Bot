@@ -380,8 +380,8 @@ sub _add_getUpdates_handler {
     my $updateURL = "https://api.telegram.org/bot${token}/getUpdates?offset=${offset}&timeout=60";
     $http_active = 1;
 
-    $self->ua->get($updateURL => sub {
-      my ($ua, $tx) = @_;
+    $self->ua->get_p($updateURL)->then(sub {
+      my ($tx) = @_;
       my $res = $tx->res->json;
       my $items = $res->{result};
       foreach my $item (@$items) {
@@ -389,6 +389,11 @@ sub _add_getUpdates_handler {
         $self->_process_message($item);
       }
 
+      $http_active = 0;
+    })->catch(sub {
+      my ($error) = @_;
+      warn "Connection error: $error";
+      
       $http_active = 0;
     });
   });
