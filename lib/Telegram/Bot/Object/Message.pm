@@ -149,7 +149,7 @@ sub reply {
   my $text = shift;
   my $args = shift // {};
 
-  return $self->_brain->sendMessage({chat_id => $self->chat->id, text => $text, $args->%* });
+  return $self->_brain->sendMessage({chat_id => $self->chat->id, text => $text, %$args });
 }
 
 1;
