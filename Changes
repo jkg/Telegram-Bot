@@ -1,5 +1,8 @@
 {{$NEXT}}
 
+    - reply method now passes additional args straight through to sendMessage
+    - enable automatic testing on every push, via GitHub Actions
+
 0.024     2023-10-10 12:41:52+01:00 Europe/London
 
     - sending messages now warns on errors, but never fails (kk12l) (GH#5)
