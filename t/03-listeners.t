@@ -1,42 +1,52 @@
+use strict; use warnings;
+
 use Test::More;
+use Test::Warn;
+use Telegram::Bot::Brain;
 
-use_ok ('Telegram::Bot::Brain');
+my $bot = Telegram::Bot::Brain->new();
 
-my $b = Telegram::Bot::Brain->new();
+my $runcounter = 0;
+my $msg = { message_id => 123457, text => "boop", date => 12346, from => { id => 444 } };
 
-my $foo = 0;
-$b->add_listener( sub { shift; $foo++ if shift->text =~ /hello/ } );
+subtest add_listener => sub {
+    $bot->add_listener( sub { shift; $runcounter++ if shift->text =~ /hello/ } );
+    $msg->{text} = "hello";
+    $bot->_process_message( { message => $msg } );
 
-my $msg1 = { message_id => 123456, text => "goodbye", date => 12346, from => { id => 444 } };
+    is $runcounter, 1
+        => "Added listener was executed";
+    $runcounter = 0;
 
-$b->_process_message( { message => $msg1 } );
-ok (! $foo, 'foo still 0');
+    $bot->add_listener(sub { shift; $runcounter++ if length(shift->text) >= 10 } );
+    $msg->{text} = "hellothere";
+    $bot->_process_message( { message => $msg } );
 
-my $msg2 = { message_id => 123457, text => "hello", date => 12346, from => { id => 444 } };
+    is $runcounter, 2 # 2 because both listeners match
+        => "When we have two listeners, both are executed";
+    $runcounter = 0;
 
-$b->_process_message( { message => $msg2 } );
-is ($foo, 1, 'foo is now 1');
+    $msg->{text} = "facetiously";
+    $bot->_process_message( { message => $msg } );
 
-$b->add_listener(sub { shift; $foo++ if length(shift->text) == 10 } );
+    is $runcounter, 1 # 1 because only second listener matches
+        => "And the listeners do have their individual behaviours";
+    $runcounter = 0;
+};
 
-my $msg3 = { message_id => 123457, text => "hellohello", date => 12346, from => { id => 444 } };
+subtest message_types => sub {
 
-$b->_process_message( { message => $msg3 } );
-is ($foo, 3, 'foo is 3 - both listeners triggered');
+    $bot->_process_message( { edited_message => $msg } );
+    is $runcounter, 1
+        => "Edited messages still trigger the listener";
+    $runcounter = 0;
 
-my $msg4 = { message_id => 123457, text => "chimpthere", date => 12346, from => { id => 444 } };
+    warning_like { $bot->_process_message( { some_unknown_field => $msg } ) } qr/know how to handle/
+        => 'Warns correctly about the unexpected message type';
 
-$b->_process_message( { message => $msg4 } );
-is ($foo, 4, 'foo became');
+    is $runcounter, 0
+        => "... but doesn't do anything, since no listener was invoked";
 
-# check that edited messages get reprocessed
-
-$b->_process_message( { edited_message => $msg4 } );
-is ($foo, 5, 'foo is 5, edited message triggered listener again');
-
-# check that unknown fields no longer die
-
-$b->_process_message( { some_unknown_field => $msg4 } );
-is ($foo, 5, 'foo still 5 but Brain no longer dies' );
+};
 
 done_testing();
