@@ -34,6 +34,7 @@ use Telegram::Bot::Object::SuccessfulPayment;
 use Telegram::Bot::Object::PassportData;
 use Telegram::Bot::Object::InlineKeyboardMarkup;
 use Telegram::Bot::Object::ReplyKeyboardMarkup;
+use Telegram::Bot::Object::InlineQuery;
 
 use Data::Dumper;
 
@@ -89,6 +90,7 @@ has 'successful_payment'; # SuccessfulPayment
 has 'connected_website';
 has 'passport_data'; # PassportData
 has 'reply_markup'; # Array of InlineKeyboardMarkup/ReplyKeyboardMarkup
+has 'inline_query'; # InlineQuery
 
 sub fields {
   return {
@@ -127,6 +129,7 @@ sub fields {
           'Telegram::Bot::Object::PassportData'         => [qw/passport_data/],
           'Telegram::Bot::Object::InlineKeyboardMarkup' => [qw/reply_markup/],
           'Telegram::Bot::Object::ReplyKeyboardMarkup'  => [qw/reply_markup/],
+          'Telegram::Bot::Object::InlineQuery'          => [qw/inline_query/],
 
   };
 }
