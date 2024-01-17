@@ -261,6 +261,45 @@ sub forwardMessage {
   return Telegram::Bot::Object::Message->create_from_hash($api_response, $self);
 }
 
+=method deleteMessage
+
+See L<https://core.telegram.org/bots/api#deletemessage>.
+
+Takes a hash C<$ags> that contains exactly two keys:
+
+=over
+
+=item C<chat_id>
+
+the id of the chat we want to delete the message from
+
+=item C<message_id>
+
+the id of the message we want to delete
+
+=back
+
+Returns true on success.
+
+=cut
+
+sub deleteMessage {
+  my $self = shift;
+  my $args = shift || {};
+  my $send_args = {};
+  croak "no chat_id supplied" unless $args->{chat_id};
+  $send_args->{chat_id} = $args->{chat_id};
+ 
+  croak "no message_id supplied" unless $args->{message_id};
+  $send_args->{message_id} = $args->{message_id};
+  
+  my $token = $self->token || croak "no token?";
+  my $url = "https://api.telegram.org/bot${token}/deleteMessage";
+  my $api_response = $self->_post_request($url, $send_args);
+ 
+  return $api_response;
+}
+
 =method sendPhoto
 
 See L<https://core.telegram.org/bots/api#sendphoto>.

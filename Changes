@@ -1,5 +1,6 @@
 {{$NEXT}}
 
+    - add deleteMessage method for deleting messages
     - reply method now passes additional args straight through to sendMessage
     - enable automatic testing on every push, via GitHub Actions
 
