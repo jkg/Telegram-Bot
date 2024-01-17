@@ -2,6 +2,7 @@
 
     - add deleteMessage method for deleting messages
     - reply method now passes additional args straight through to sendMessage
+    - add support for inline mode
     - enable automatic testing on every push, via GitHub Actions
 
 0.024     2023-10-10 12:41:52+01:00 Europe/London
