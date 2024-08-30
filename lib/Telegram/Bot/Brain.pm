@@ -522,6 +522,7 @@ sub _process_message {
     $update = Telegram::Bot::Object::Message->create_from_hash($item->{channel_post}, $self)        if $item->{channel_post};
     $update = Telegram::Bot::Object::Message->create_from_hash($item->{edited_channel_post}, $self) if $item->{edited_channel_post};
     $update = Telegram::Bot::Object::InlineQuery->create_from_hash($item->{inline_query}, $self)    if $item->{inline_query};
+    $update = Telegram::Bot::Object::Message->create_from_hash($item->{my_chat_member}, $self)      if $item->{my_chat_member};		# after v0.025
 
     # if we got to this point without creating a response, it must be a type we
     # don't handle yet
