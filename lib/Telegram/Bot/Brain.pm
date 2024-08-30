@@ -484,7 +484,7 @@ sub setMyCommands {		# after v0.025
   $send_args->{language_code} = $args->{language_code} if ($args->{language_code}//'') ne '';
   my $token = $self->token || croak "no token?";
   my $url = "https://api.telegram.org/bot${token}/setMyCommands";
-  return = $self->_post_request($url, $send_args);
+  return $self->_post_request($url, $send_args);
 }
 
 sub _add_getUpdates_handler {
