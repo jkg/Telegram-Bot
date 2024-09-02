@@ -474,6 +474,19 @@ sub answerInlineQuery {
   return $api_response;
 }
 
+sub setMyCommands {		# after v0.025
+  my $self = shift;
+  my $args = shift || {};
+  
+  my $send_args = {};
+  croak "no commands supplied" unless $args->{commands};
+  $send_args->{commands} = encode_json $args->{commands};
+  $send_args->{language_code} = $args->{language_code} if ($args->{language_code}//'') ne '';
+  my $token = $self->token || croak "no token?";
+  my $url = "https://api.telegram.org/bot${token}/setMyCommands";
+  return $self->_post_request($url, $send_args);
+}
+
 sub _add_getUpdates_handler {
   my $self = shift;
 
