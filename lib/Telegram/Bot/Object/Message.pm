@@ -140,7 +140,7 @@ sub arrays {
   qw/photo entities caption_entities new_chat_members new_chat_photo/
 }
 
-=method
+=method reply
 
 A convenience method to reply to a message with text.
 

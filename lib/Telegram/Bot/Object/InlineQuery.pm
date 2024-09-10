@@ -29,7 +29,7 @@ sub fields {
     };
 }
 
-=method
+=method reply
 
 A convenience method to reply to an inline query with an array of Perl objects.
 
@@ -63,9 +63,9 @@ Pass the offset that a client should send in the next query with the same text t
 
 A JSON-serialized object describing a button to be shown above inline query results
 
-=over
+=back
 
-=over
+=back
 
 Will return true.
 

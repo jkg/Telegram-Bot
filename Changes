@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+    - fix broken POD
+
 0.026     2024-09-02 14:04:35+01:00 Europe/London
 
     - add support for the chatmember update type
