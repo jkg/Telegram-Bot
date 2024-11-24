@@ -36,6 +36,8 @@ use Telegram::Bot::Object::InlineKeyboardMarkup;
 use Telegram::Bot::Object::ReplyKeyboardMarkup;
 use Telegram::Bot::Object::InlineQuery;
 use Telegram::Bot::Object::Member;		# after v0.026
+use Telegram::Bot::Object::ForceReply;
+use Telegram::Bot::Object::ReplyParameters;
 
 use Data::Dumper;
 
@@ -92,6 +94,7 @@ has 'connected_website';
 has 'passport_data'; # PassportData
 has 'reply_markup'; # Array of InlineKeyboardMarkup/ReplyKeyboardMarkup
 has 'inline_query'; # InlineQuery
+has 'reply_parameters';
 
 sub fields {
   return {
@@ -132,6 +135,8 @@ sub fields {
           'Telegram::Bot::Object::InlineKeyboardMarkup' => [qw/reply_markup/],
           'Telegram::Bot::Object::ReplyKeyboardMarkup'  => [qw/reply_markup/],
           'Telegram::Bot::Object::InlineQuery'          => [qw/inline_query/],
+          'Telegram::Bot::Object::ForceReply'           => [qw/reply_markup/],
+          'Telegram::Bot::Object::ReplyParameters'      => [qw/reply_parameters/],
 
   };
 }
@@ -154,6 +159,7 @@ sub reply {
   my $text = shift;
   my $args = shift // {};
 
+  $args->{reply_parameters} ||= Telegram::Bot::Object::ReplyParameters->new({message_id => $self->message_id });
   return $self->_brain->sendMessage({chat_id => $self->chat->id, text => $text, %$args });
 }
 

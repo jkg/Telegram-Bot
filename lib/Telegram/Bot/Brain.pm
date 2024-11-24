@@ -215,7 +215,13 @@ sub sendMessage {
   $send_args->{parse_mode} = $args->{parse_mode} if exists $args->{parse_mode};
   $send_args->{disable_web_page_preview} = $args->{disable_web_page_preview} if exists $args->{disable_web_page_preview};
   $send_args->{disable_notification} = $args->{disable_notification} if exists $args->{disable_notification};
-  $send_args->{reply_to_message_id}  = $args->{reply_to_message_id}  if exists $args->{reply_to_message_id};
+  $send_args->{reply_parameters}     = encode_json($args->{reply_parameters}->as_hashref)
+      if exists $args->{reply_parameters};
+  # deprecated reply_to_message_id
+  if (exists $args->{reply_to_message_id}) {
+      $send_args->{reply_parameters} = encode_json({message_id => $args->{reply_to_message_id}});
+  }
+  # $send_args->{reply_to_message_id}  = $args->{reply_to_message_id}  if exists $args->{reply_to_message_id};
 
   # check reply_markup is the right kind
   if (exists $args->{reply_markup}) {
