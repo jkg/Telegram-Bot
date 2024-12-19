@@ -512,7 +512,7 @@ sub answerInlineQuery {
   return $api_response;
 }
 
-sub setMyCommands {		# after v0.025
+sub setMyCommands {
   my $self = shift;
   my $args = shift || {};
   
@@ -694,6 +694,9 @@ sub _process_message {
     $update = Telegram::Bot::Object::CallbackQuery->create_from_hash($item->{callback_query}, $self) if $item->{callback_query};
     $update = Telegram::Bot::Object::ChatJoinRequest->create_from_hash($item->{chat_join_request}, $self) if $item->{chat_join_request};
     $update = Telegram::Bot::Object::ChatMemberUpdated->create_from_hash($item->{chat_member}, $self) if $item->{chat_member};
+    $update = Telegram::Bot::Object::ChatMemberUpdated->create_from_hash($item->{my_chat_member}, $self) if $item->{my_chat_member};
+    # chat_member => someone else
+    # my_chat_member => actually us
 
     # if we got to this point without creating a response, it must be a type we
     # don't handle yet

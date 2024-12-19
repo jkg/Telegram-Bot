@@ -35,7 +35,6 @@ use Telegram::Bot::Object::PassportData;
 use Telegram::Bot::Object::InlineKeyboardMarkup;
 use Telegram::Bot::Object::ReplyKeyboardMarkup;
 use Telegram::Bot::Object::InlineQuery;
-use Telegram::Bot::Object::Member;		# after v0.026
 use Telegram::Bot::Object::ForceReply;
 use Telegram::Bot::Object::ReplyParameters;
 
@@ -49,6 +48,7 @@ has 'chat';  # Chat
 
 has 'forward_from'; # User
 has 'forward_from_chat'; # Chat
+has 'sender_chat'; # Chat
 has 'forward_from_message_id';
 has 'forward_signature';
 has 'forward_sender_name';
@@ -107,9 +107,8 @@ sub fields {
                                                             channel_chat_created migrate_to_chat_id
                                                             migrate_from_chat_id connected_website/],
           'Telegram::Bot::Object::User'                 => [qw/from forward_from new_chat_members left_chat_member /],
-	  'Telegram::Bot::Object::Member'               => [qw/new_chat_member old_chat_member /],		# after v0.021
 
-          'Telegram::Bot::Object::Chat'                 => [qw/chat forward_from_chat/],
+          'Telegram::Bot::Object::Chat'                 => [qw/chat forward_from_chat sender_chat/],
           'Telegram::Bot::Object::Message'              => [qw/reply_to_message pinned_message/],
           'Telegram::Bot::Object::MessageEntity'        => [qw/entities caption_entities /],
 
@@ -145,7 +144,7 @@ sub arrays {
   qw/photo entities caption_entities new_chat_members new_chat_photo/
 }
 
-=method
+=method reply
 
 A convenience method to reply to a message with text.
 
