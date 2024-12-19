@@ -1,6 +1,6 @@
 package Telegram::Bot::Object::ChatMember;
 
-# ABSTRACT: The base class for Telegram message 'ChatMember' type.
+# ABSTRACT: The base class for the Telegram type "ChatMember".
 
 =head1 DESCRIPTION
 
@@ -10,6 +10,10 @@ attributes available for L<Telegram::Bot::Object::ChatMember> objects.
 =cut
 
 use Mojo::Base 'Telegram::Bot::Object::Base';
+
+use Telegram::Bot::Object::User;
+
+use Data::Dumper;
 
 has 'status';
 has 'user';
@@ -59,6 +63,9 @@ sub fields {
                 custom_title is_anonymous until_date/],
         'Telegram::Bot::Object::User' => [qw/user/],
   };
+}
+
+sub arrays {
 }
 
 1;

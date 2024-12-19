@@ -4,7 +4,7 @@ package Telegram::Bot::Object::ChatMemberUpdated;
 
 =head1 DESCRIPTION
 
-See L<https://core.telegram.org/bots/api#message> for details of the
+See L<https://core.telegram.org/bots/api#chatmemberupdated> for details of the
 attributes available for L<Telegram::Bot::Object::ChatMemberUpdated> objects.
 
 =cut
@@ -17,10 +17,9 @@ use Data::Dumper;
 
 # basic message stuff
 
-has 'chat';                             # Chat
-has 'from';                             # User
-has 'date';
-
+has 'chat'; # Chat
+has 'from'; # User
+has 'date';  # Integer
 has 'new_chat_member';                  # ChatMember
 has 'old_chat_member';                  # ChatMember
 has 'invite_link';                      # ChatInviteLink
@@ -37,8 +36,24 @@ sub fields {
 }
 
 sub arrays {
-  qw//
 }
 
+=method
+
+Convenience methods
+
+=cut
+
+sub approve {
+  my $self = shift;
+  my $text = shift;
+  return $self->_brain->approveChatMemberUpdated({chat_id => $self->chat->id, user_id => $self->from->id});
+}
+
+sub decline {
+  my $self = shift;
+  my $text = shift;
+  return $self->_brain->declineChatMemberUpdated({chat_id => $self->chat->id, user_id => $self->from->id});
+}
 
 1;
