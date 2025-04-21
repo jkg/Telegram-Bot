@@ -154,7 +154,9 @@ sub think {
   $self->init();
 
   $self->_add_getUpdates_handler;
-  Mojo::IOLoop->start unless Mojo::IOLoop->is_running;
+  do {
+    Mojo::IOLoop->start;
+  } until Mojo::IOLoop->is_running;
 }
 
 =head1 Telegram Bot API methods
