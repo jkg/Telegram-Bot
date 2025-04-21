@@ -156,6 +156,7 @@ sub think {
   $self->_add_getUpdates_handler;
   do {
     Mojo::IOLoop->start;
+    sleep (1);
   } until Mojo::IOLoop->is_running;
 }
 
