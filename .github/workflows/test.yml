@@ -26,7 +26,7 @@ jobs:
           EXTENDED_TESTING: 1
           RELEASE_TESTING: 1
         run: upgrade-perl-helpers && auto-build-and-test-dist
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: build_dir
           path: build_dir
@@ -38,7 +38,7 @@ jobs:
       image: perldocker/perl-tester:5.38
     steps:
       - uses: actions/checkout@v3 # codecov wants to be inside a Git repository
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: build_dir
           path: .
@@ -67,9 +67,11 @@ jobs:
           - "5.34"
           - "5.36"
           - "5.38"
+          - "5.40"
+          - "5.42"
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: build_dir
           path: .
@@ -94,12 +96,14 @@ jobs:
           - "5.34"
           - "5.36"
           - "5.38"
+          - "5.40"
+          - "5.42"
     steps:
       - name: Set Up Perl
         uses: shogo82148/actions-setup-perl@v1
         with:
           perl-version: ${{ matrix.perl-version }}
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: build_dir
           path: .
@@ -127,13 +131,14 @@ jobs:
           - "5.32"
           - "5.36"
           - "5.38"
+          - "5.40"
     steps:
       - name: Set Up Perl
         uses: shogo82148/actions-setup-perl@v1
         with:
           perl-version: ${{ matrix.perl-version }}
           distribution: strawberry # this option only used on Windows
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: build_dir
           path: .
