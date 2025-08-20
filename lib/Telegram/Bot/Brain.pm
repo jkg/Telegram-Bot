@@ -351,6 +351,8 @@ sub sendPhoto {
   my $self = shift;
   my $args = shift || {};
 
+  croak "no chat_id supplied" unless $args->{chat_id};
+
   # photo can be a string (which might be either a URL for telegram servers
   # to fetch, or a file_id string) or a file on disk to upload - we need
   # to handle that last case here as it changes the way we create the HTTP
