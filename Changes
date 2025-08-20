@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.028     2025-08-20 15:35:36+01:00 Europe/London
+
     - sendPhoto now passes additional parameters directly through to the API
       rather than only permitting chat_id and photo to go through
     - sendPhoto now actually works with local files, meaning the synopsis
