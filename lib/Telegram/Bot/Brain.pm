@@ -350,10 +350,8 @@ Returns a L<Telegram::Bot::Object::Message> object.
 sub sendPhoto {
   my $self = shift;
   my $args = shift || {};
-  my $send_args = {};
 
   croak "no chat_id supplied" unless $args->{chat_id};
-  $send_args->{chat_id} = $args->{chat_id};
 
   # photo can be a string (which might be either a URL for telegram servers
   # to fetch, or a file_id string) or a file on disk to upload - we need
@@ -361,15 +359,12 @@ sub sendPhoto {
   # request
   croak "no photo supplied" unless $args->{photo};
   if (-e $args->{photo}) {
-    $send_args->{photo} = { photo => { file => $args->{photo} } };
-  }
-  else {
-    $send_args->{photo} = $args->{photo};
+    $args->{photo} = { file => $args->{photo} };
   }
 
   my $token = $self->token || croak "no token?";
   my $url = "https://api.telegram.org/bot${token}/sendPhoto";
-  my $api_response = $self->_post_request($url, $send_args);
+  my $api_response = $self->_post_request($url, $args);
 
   return Telegram::Bot::Object::Message->create_from_hash($api_response, $self);
 }

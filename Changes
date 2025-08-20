@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+    - sendPhoto now passes additional parameters directly through to the API
+      rather than only permitting chat_id and photo to go through
+    - sendPhoto now actually works with local files, meaning the synopsis
+      code now works as intended.
     - fix broken POD
 
 0.027     2024-12-19 19:53:28+00:00 Europe/London
