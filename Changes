@@ -1,5 +1,8 @@
 {{$NEXT}}
 
+    - use to_json rather than encode_json everywhere, to avoid encoding
+      strings which are already utf-8 encoded
+
 0.028     2025-08-20 15:35:36+01:00 Europe/London
 
     - sendPhoto now passes additional parameters directly through to the API

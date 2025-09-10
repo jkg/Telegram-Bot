@@ -30,8 +30,8 @@ sub kb_dictionary {
     if ($update->text =~ /dictionary/) {
       # start the search thing
       my $mkup = Telegram::Bot::Object::ReplyKeyboardMarkup->new();
-      my $btn1 = Telegram::Bot::Object::KeyboardButton->new(text => 'abc');
-      my $btn2 = Telegram::Bot::Object::KeyboardButton->new(text => 'def');
+      my $btn1 = Telegram::Bot::Object::KeyboardButton->new(text => 'foo Тест 1');
+      my $btn2 = Telegram::Bot::Object::KeyboardButton->new(text => 'bar text 2');
 
       $mkup->keyboard([ [ $btn1 ], [ $btn2 ] ]);
 

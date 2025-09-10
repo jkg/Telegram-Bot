@@ -79,7 +79,7 @@ sub reply {
     return $self->_brain->answerInlineQuery(
         {
             inline_query_id => $self->id,
-            results         => Mojo::JSON::encode_json($results),
+            results         => Mojo::JSON::to_json($results),
             %$args
         }
     );
